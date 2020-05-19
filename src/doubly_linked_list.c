@@ -53,45 +53,45 @@ Node* createNode(Country* country) {
     return node;
 }
 
-int sortByName(Node* node1, Node* node2) {
-    return strcmp(node1->country->name, node2->country->name) > 0;
+int sortByName(Node* node1, Node* node2, int mode) {
+    return mode * strcmp(node1->country->name, node2->country->name) > 0;
 }
 
-int sortByCapital(Node* node1, Node* node2) {
-    return strcmp(node1->country->capital, node2->country->capital) > 0;
+int sortByCapital(Node* node1, Node* node2, int mode) {
+    return mode * strcmp(node1->country->capital, node2->country->capital) > 0;
 }
 
-int sortByArea(Node* node1, Node* node2) {
-    return node1->country->area > node2->country->area;
+int sortByArea(Node* node1, Node* node2, int mode) {
+    return mode * (node1->country->area - node2->country->area) > 0;
 }
 
-int sortByPopulation(Node* node1, Node* node2) {
-    return node1->country->population > node2->country->population;
+int sortByPopulation(Node* node1, Node* node2, int mode) {
+    return mode * (node1->country->population - node2->country->population) > 0;
 }
 
-int sortByDensity(Node* node1, Node* node2) {
-    return node1->country->density > node2->country->density;
+int sortByDensity(Node* node1, Node* node2, int mode) {
+    return mode * (node1->country->density - node2->country->density) > 0;
 }
 
-int sortByHdi(Node* node1, Node* node2) {
-    return node1->country->hdi > node2->country->hdi;
+int sortByHdi(Node* node1, Node* node2, int mode) {
+    return mode * (node1->country->hdi - node2->country->hdi) > 0;
 }
 
-int sortByMinHeight(Node* node1, Node* node2) {
-    return node1->country->elevation[0] > node2->country->elevation[0];
+int sortByMinHeight(Node* node1, Node* node2, int mode) {
+    return mode * (node1->country->elevation[0] - node2->country->elevation[0]) > 0;
 }
 
-int sortByMaxHeight(Node* node1, Node* node2) {
-    return node1->country->elevation[1] > node2->country->elevation[1];
+int sortByMaxHeight(Node* node1, Node* node2, int mode) {
+    return mode * (node1->country->elevation[1] - node2->country->elevation[1]) > 0;
 }
 
-void sort(List* list, int (*compaire)(Node*, Node*)) {
+void sort(List* list, int (*compaire)(Node*, Node*, int), int mode) {
     for(int i = 0; i < list->size; ++i) {
         for(int j = 0; j < list->size - i - 1; ++j) {
             Node* node1 = searchByIndex(list, j);
             Node* node2 = searchByIndex(list, j + 1);
 
-            if(compaire(node1, node2) == 1) {
+            if(compaire(node1, node2, mode)) {
                 swapNodes(list, node1, node2);
             }
         }
@@ -100,7 +100,6 @@ void sort(List* list, int (*compaire)(Node*, Node*)) {
 
 void reverse(List* list) {
     for(int i = list->size / 2 - 1; i >= 0; --i) {
-        printf("i1 = %d i2 = %d\n", i, list->size - i + 1);
         swapNodes(list, searchByIndex(list, i), searchByIndex(list, list->size - i - 1));
     }
 }
@@ -371,8 +370,6 @@ void printList(List* list) {
         if(node->next) printSepLine();
         node = node->next;
     }
-
-    puts("");
 }
 
 void clearList(List* list) {

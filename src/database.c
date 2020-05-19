@@ -340,22 +340,44 @@ void sortCards(List* list) {
         }
     } while(error);
 
+    int choice = buf[0] - '0';
+
+    puts("\nPlease enter sort mode");
+    puts("0 - non-decreasing order");
+    puts("1 - non-increasing order");
+
+    do {
+        fgets(buf, MAXLEN, stdin);
+
+        if(error = strlen(buf) != 2 || buf[0] < '0' || buf[0] > '1') {
+            puts("Input is incorrect! Please try again\n");
+        }
+    } while(error);
+
+    int mode;
+
     if(buf[0] == '0') {
-        sort(list, sortByName);
+        mode = 1;
     } else if(buf[0] == '1') {
-        sort(list, sortByCapital);
-    } else if(buf[0] == '2') {
-        sort(list, sortByArea);
-    } else if(buf[0] == '3') {
-        sort(list, sortByPopulation);
-    } else if(buf[0] == '4') {
-        sort(list, sortByDensity);
-    } else if(buf[0] == '5') {
-        sort(list, sortByHdi);
-    } else if(buf[0] == '6') {
-        sort(list, sortByMinHeight);
-    } else if(buf[0] == '7') {
-        sort(list, sortByMaxHeight);
+        mode = -1;
+    }
+
+    if(choice == 0) {
+        sort(list, sortByName, mode);
+    } else if(choice == 1) {
+        sort(list, sortByCapital, mode);
+    } else if(choice == 2) {
+        sort(list, sortByArea, mode);
+    } else if(choice == 3) {
+        sort(list, sortByPopulation, mode);
+    } else if(choice == 4) {
+        sort(list, sortByDensity, mode);
+    } else if(choice == 5) {
+        sort(list, sortByHdi, mode);
+    } else if(choice == 6) {
+        sort(list, sortByMinHeight, mode);
+    } else if(choice == 7) {
+        sort(list, sortByMaxHeight, mode);
     }
 }
 

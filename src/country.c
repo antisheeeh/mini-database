@@ -74,7 +74,8 @@ Country* getCountryFromString(char** str) {
 }
 
 char* countryToString(Country* country) {
-    int len = snprintf(NULL, len, "%s;%s;%d;%d;%f;%f;%d;%d", country->name, country->capital, country->area, 
+    int len = 0;
+    len = snprintf(NULL, len, "%s;%s;%d;%d;%f;%f;%d;%d", country->name, country->capital, country->area, 
     country->population, country->density, country->hdi, country->elevation[0], country->elevation[1]);
 
     char* str = malloc(len + 2);

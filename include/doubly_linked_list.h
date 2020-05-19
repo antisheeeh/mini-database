@@ -33,18 +33,18 @@ List* searchByMaxHeight(List* list, int maxHeight);
 
 Node* searchByIndex(List* list, int index);
 
-int sortByName(Node* node1, Node* node2);
-int sortByCapital(Node* node1, Node* node2);
-int sortByArea(Node* node1, Node* node2);
-int sortByPopulation(Node* node1, Node* node2);
-int sortByDensity(Node* node1, Node* node2);
-int sortByHdi(Node* node1, Node* node2);
-int sortByMinHeight(Node* node1, Node* node2);
-int sortByMaxHeight(Node* node1, Node* node2);
+int sortByName(Node* node1, Node* node2, int mode);
+int sortByCapital(Node* node1, Node* node2, int mode);
+int sortByArea(Node* node1, Node* node2, int mode);
+int sortByPopulation(Node* node1, Node* node2, int mode);
+int sortByDensity(Node* node1, Node* node2, int mode);
+int sortByHdi(Node* node1, Node* node2, int mode);
+int sortByMinHeight(Node* node1, Node* node2, int mode);
+int sortByMaxHeight(Node* node1, Node* node2, int mode);
 
 
 void swapNodes(List* list, Node* node1, Node* node2);
-void sort(List* list, int (*compaire)(Node*, Node*));
+void sort(List* list, int (*compaire)(Node*, Node*, int), int mode);
 void reverse(List* list);
 void pushFront(List* list, Node* node);
 void pushBack(List* list, Node* node);
