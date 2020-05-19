@@ -47,7 +47,7 @@ void run(FILE* db, List* list) {
                 CLS;
                 options[buf[0] - '0'](list);
                 updateDatabase(db, list);
-                puts("Press any key to continue...");
+                puts("\nPress any key to continue...");
                 getchar();
             }
         } while(error);
@@ -77,5 +77,5 @@ void printMenu(void) {
 void printReference(void) {
     puts("Reference\n");
     puts("This is a mini database developed in C");
-    puts("Author - Kirill Konoplev\n");
+    puts("Author - Kirill Konoplev");
 }

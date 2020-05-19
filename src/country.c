@@ -12,32 +12,47 @@ Country* getCountryFromConsole(void) {
     Country *country = malloc(sizeof(*country));
     if(!country) return NULL;
 
+    char buf[MAXLEN];
+
     printf("Name: ");
-    scanf("%s", country->name);
+    if(!fgets(buf, MAXLEN, stdin)) return NULL;
+    buf[strlen(buf) - 1] = '\0';
+    strcpy(country->name, buf); 
 
     printf("Capital: ");
-    scanf("%s", country->capital);
+    if(!fgets(buf, MAXLEN, stdin)) return NULL;
+    buf[strlen(buf) - 1] = '\0';
+    strcpy(country->capital, buf);
 
     printf("Area: ");
-    scanf("%d", &country->area);
+    fgets(buf, MAXLEN, stdin);
+    country->area = atoi(buf);
+    if(!country->area && buf[0] != '0') return NULL;;
 
     printf("Population: ");
-    scanf("%d", &country->population);
+    fgets(buf, MAXLEN, stdin);
+    country->population = atoi(buf);
+    if(!country->population && buf[0] != '0') return NULL;
 
     printf("Density: ");
-    scanf("%f", &country->density);
+    fgets(buf, MAXLEN, stdin);
+    country->density = atof(buf);
+    if(!country->density && buf[0] != '0') return NULL;
 
     printf("HDI: ");
-    scanf("%f", &country->hdi);
+    fgets(buf, MAXLEN, stdin);
+    country->hdi = atof(buf);
+    if(!country->hdi && buf[0] != '0') return NULL;
 
     printf("Min height: ");
-    scanf("%d", &country->elevation[0]);
+    fgets(buf, MAXLEN, stdin);
+    country->elevation[0] = atoi(buf);
+    if(!country->elevation[0] && buf[0] != '0') return NULL;;
 
     printf("Max height: ");
-    scanf("%d", &country->elevation[1]);
-
-    getchar();
-    puts("");
+    fgets(buf, MAXLEN, stdin);
+    country->elevation[1] = atoi(buf);
+    if(!country->elevation[1] && buf[0] != '0') return NULL;
 
     return country;
 }

@@ -5,28 +5,59 @@
 
 #include "../include/database.h"
 
-void addCard(List* list) {
-    puts("Add card\n");
+#ifdef linux
+#define CLS system("clear")
+#else
+#define CLS system("cls")
+#endif
 
-    puts("Please enter your country");
-    Country* country = getCountryFromConsole();
+void addCard(List* list) {
+    int error;
+    Country* country;
+
+    do {
+        puts("Add card\n");
+
+        puts("Please enter your country");
+        country = getCountryFromConsole();
+
+        if(error = !country) {
+            puts("\nInput is incorrect! Please try again");
+            puts("Press any key to continue...");
+            getchar();
+            CLS;
+        }
+    } while(error);
 
     pushBack(list, createNode(country));
 }
 
 void editCard(List* list) {
-    puts("Edit card\n");
-
-    puts("Please enter card index");
+    int error;
     int index;
-    scanf("%d", &index);
+    char buf[MAXLEN];
+
+    do {
+        puts("Edit card\n");
+
+        puts("Please enter card index");
+
+        fgets(buf, MAXLEN, stdin);
+        index = atoi(buf);
+        
+        if(error = !index && buf[0] != '0') {
+            puts("Input is incorrect! Please try again\n");
+            puts("Press any key to continue...");
+            getchar();
+            CLS;
+        }
+    } while(error);
 
     Node* node = searchByIndex(list, index);
     puts("");
 
     if(!node) {
         puts("No card with this index\n");
-        getchar();
         return;
     }
 
@@ -42,167 +73,289 @@ void editCard(List* list) {
     puts("6 - min height");
     puts("7 - max height");
 
-    getchar();
+    do {
+        fgets(buf, MAXLEN, stdin);
 
-    char buf[MAXLEN];
-    fgets(buf, MAXLEN, stdin);
+        if(error = strlen(buf) != 2 || buf[0] < '0' || buf[0] > '7') {
+            puts("Input is incorrect! Please try again\n");
+            puts("What do you want to edit?");
+        }
+    } while(error);
 
-    if(strlen(buf) == 2 && '0' <= buf[0] && buf[0] <= '7') {
+    do {
         if(buf[0] == '0') {
             printf("Name: ");
-            scanf("%s", node->country->name);
-        } else if(buf[1] == '1') {
+
+            if(error = !fgets(buf, MAXLEN, stdin)) {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                buf[strlen(buf) - 1] = '\0';
+                strcpy(node->country->name, buf);
+            }
+        } else if(buf[0] == '1') {
             printf("Capital: ");
-            scanf("%s", node->country->capital);
+
+            if(error = !fgets(buf, MAXLEN, stdin)) {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                buf[strlen(buf) - 1] = '\0';
+                strcpy(node->country->capital, buf);
+            }
         } else if(buf[0] == '2') {
             printf("Area: ");
-            scanf("%d", &node->country->area);
+            fgets(buf, MAXLEN, stdin);
+            int area = atoi(buf);
+
+            if(error = !area && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                node->country->area = area;
+            }
         } else if(buf[0] == '3') {
             printf("Population: ");
-            scanf("%d", &node->country->population);
+            fgets(buf, MAXLEN, stdin);
+            int population = atoi(buf);
+
+            if(error = !population && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                node->country->population = population;
+            }
         } else if(buf[0] == '4') {
             printf("Density: ");
-            scanf("%f", &node->country->density);
+            fgets(buf, MAXLEN, stdin);
+            float density = atof(buf);
+
+            if(error = !density && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                node->country->density = density;
+            }
         } else if(buf[0] == '5') {
             printf("HDI: ");
-            scanf("%f", &node->country->hdi);
+            fgets(buf, MAXLEN, stdin);
+            float hdi = atof(buf);
+
+            if(error = !hdi && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                node->country->hdi = hdi;
+            }
         } else if(buf[0] == '6') {
             printf("Min height: ");
-            scanf("%d", &node->country->elevation[0]);
+            fgets(buf, MAXLEN, stdin);
+            int minHeight = atoi(buf);
+            
+            if(error = !minHeight && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                node->country->elevation[0] = minHeight;
+            }
         } else if(buf[0] == '7') {
             printf("Max height: ");
-            scanf("%d", &node->country->elevation[1]);
+            fgets(buf, MAXLEN, stdin);
+            int maxHeight = atoi(buf);
+
+            if(error = !maxHeight && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                node->country->elevation[1] = maxHeight;
+            }
         }
-    }
+    } while(error);
 }
 
 void deleteCard(List* list) {
-    puts("Delete card\n");
-
-    puts("Please enter index of country to be deleted");
+    char buf[MAXLEN];
     int index;
-    scanf("%d", &index);
+    int error;
+
+    do {
+        puts("Delete card\n");
+        puts("Please enter card index");
+
+        fgets(buf, MAXLEN, stdin);
+        index = atoi(buf);
+        
+        if(error = !index && buf[0] != '0') {
+            puts("Input is incorrect! Please try again\n");
+            puts("Press any key to continue...");
+            getchar();
+            CLS;
+        }
+    } while(error);
 
     Node* node = searchByIndex(list, index);
-    puts("");
 
     if(!node) {
-        puts("No card with this index\n");
-        getchar();
-        return;
+        puts("\nNo card with this index");
+    } else {
+        removeNode(list, node);
     }
-
-    removeNode(list, node);
 }
 
 void searchCard(List* list) {
-    puts("Search card\n");
-
-    puts("Please enter field to be searched");
-    puts("0 - name");
-    puts("1 - capital");
-    puts("2 - area");
-    puts("3 - population");
-    puts("4 - density");
-    puts("5 - hdi");
-    puts("6 - min height");
-    puts("7 - max height");
-
+    int error;
     char buf[MAXLEN];
-    fgets(buf, MAXLEN, stdin);
+
+    do {
+        puts("Search card\n");
+
+        puts("Please enter field to be searched");
+        puts("0 - name");
+        puts("1 - capital");
+        puts("2 - area");
+        puts("3 - population");
+        puts("4 - density");
+        puts("5 - hdi");
+        puts("6 - min height");
+        puts("7 - max height");
+
+        fgets(buf, MAXLEN, stdin);
+        
+        if(error = strlen(buf) != 2 || buf[0] < '0' || buf[0] > '7') {
+            puts("Input is incorrect! Please try again\n");
+            puts("Press any key to continue...");
+            getchar();
+            CLS;
+        }
+    } while(error);
 
     List* res = NULL;
 
-    if(strlen(buf) == 2 && '0' <= buf[0] && buf[0] <= '7') {
+    do {
         if(buf[0] == '0') {
-            puts("Enter name");
-            char name[MAXLEN];
-            scanf("%s", name);
-            res = searchByName(list, name);
+            printf("Name: ");
+
+            if(error = !fgets(buf, MAXLEN, stdin)) {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                buf[strlen(buf) - 1] = '\0';
+                res = searchByName(list, buf);
+            }
         } else if(buf[0] == '1') {
-            puts("Enter capital");
-            char capital[MAXLEN];
-            scanf("%s", capital);
-            res = searchByCapital(list, capital);
+            printf("Capital: ");
+
+            if(error = !fgets(buf, MAXLEN, stdin)) {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                buf[strlen(buf) - 1] = '\0';
+                res = searchByCapital(list, buf);
+            }
         } else if(buf[0] == '2') {
-            puts("Enter area");
-            int area;
-            scanf("%d", &area);
-            res = searchByArea(list, area);
+            printf("Area: ");
+            fgets(buf, MAXLEN, stdin);
+            int area = atoi(buf);
+
+            if(error = !area && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                res = searchByArea(list, area);
+            }
         } else if(buf[0] == '3') {
-            puts("Enter population");
-            int population;
-            scanf("%d", &population);
-            res = searchByPopulation(list, population);
+            printf("Population: ");
+            fgets(buf, MAXLEN, stdin);
+            int population = atoi(buf);
+
+            if(error = !population && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                res = searchByPopulation(list, population);
+            }
         } else if(buf[0] == '4') {
-            puts("Enter density");
-            float density;
-            scanf("%f", &density);
-            res = searchByDensity(list, density);
+            printf("Density: ");
+            fgets(buf, MAXLEN, stdin);
+            float density = atof(buf);
+
+            if(error = !density && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                res = searchByDensity(list, density);
+            }
         } else if(buf[0] == '5') {
-            puts("Enter hdi");
-            float hdi;
-            scanf("%f", &hdi);
-            res = searchByHdi(list, hdi);
+            printf("HDI: ");
+            fgets(buf, MAXLEN, stdin);
+            float hdi = atof(buf);
+
+            if(error = !hdi && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                res = searchByHdi(list, hdi);
+            }
         } else if(buf[0] == '6') {
-            puts("Enter min height");
-            int minHeight;
-            scanf("%d", &minHeight);
-            res = searchByMinHeight(list, minHeight);
+            printf("Min height: ");
+            fgets(buf, MAXLEN, stdin);
+            int minHeight = atoi(buf);
+            
+            if(error = !minHeight && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                res = searchByMinHeight(list, minHeight);
+            }
         } else if(buf[0] == '7') {
-            puts("Enter max height");
-            int maxHeight;
-            scanf("%d", &maxHeight);
-            res = searchByMaxHeight(list, maxHeight);
+            printf("Max height: ");
+            fgets(buf, MAXLEN, stdin);
+            int maxHeight = atoi(buf);
+
+            if(error = !maxHeight && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+            } else {
+                res = searchByMinHeight(list, maxHeight);
+            }
         }
-    }
+    } while(error);
 
     if(isEmpty(res)) {
-        puts("No card with this index\n");
-        getchar();
-        return;
+        puts("\nNo card");
+    } else {
+        printList(res);
+        clearList(res);
     }
-
-    printList(res);
-    clearList(res);
-
-    getchar();
 }
 
 void sortCards(List* list) {
-    puts("Sort cards\n");
-
-    puts("Please enter field to be sorted");
-    puts("0 - name");
-    puts("1 - capital");
-    puts("2 - area");
-    puts("3 - population");
-    puts("4 - density");
-    puts("5 - hdi");
-    puts("6 - min height");
-    puts("7 - max height");
-
+    int error;
     char buf[MAXLEN];
-    fgets(buf, MAXLEN, stdin);
 
-    if(strlen(buf) == 2 && '0' <= buf[0] && buf[0] <= '7') {
-        if(buf[0] == '0') {
-            sort(list, sortByName);
-        } else if(buf[0] == '1') {
-            sort(list, sortByCapital);
-        } else if(buf[0] == '2') {
-            sort(list, sortByArea);
-        } else if(buf[0] == '3') {
-            sort(list, sortByPopulation);
-        } else if(buf[0] == '4') {
-            sort(list, sortByDensity);
-        } else if(buf[0] == '5') {
-            sort(list, sortByHdi);
-        } else if(buf[0] == '6') {
-            sort(list, sortByMinHeight);
-        } else if(buf[0] == '7') {
-            sort(list, sortByMaxHeight);
+    do {
+        puts("Sort cards\n");
+
+        puts("Please enter field to be sorted");
+        puts("0 - name");
+        puts("1 - capital");
+        puts("2 - area");
+        puts("3 - population");
+        puts("4 - density");
+        puts("5 - hdi");
+        puts("6 - min height");
+        puts("7 - max height");
+
+        fgets(buf, MAXLEN, stdin);
+        
+        if(error = strlen(buf) != 2 || buf[0] < '0' || buf[0] > '7') {
+            puts("Input is incorrect! Please try again\n");
+            puts("Press any key to continue...");
+            getchar();
+            CLS;
         }
+    } while(error);
+
+    if(buf[0] == '0') {
+        sort(list, sortByName);
+    } else if(buf[0] == '1') {
+        sort(list, sortByCapital);
+    } else if(buf[0] == '2') {
+        sort(list, sortByArea);
+    } else if(buf[0] == '3') {
+        sort(list, sortByPopulation);
+    } else if(buf[0] == '4') {
+        sort(list, sortByDensity);
+    } else if(buf[0] == '5') {
+        sort(list, sortByHdi);
+    } else if(buf[0] == '6') {
+        sort(list, sortByMinHeight);
+    } else if(buf[0] == '7') {
+        sort(list, sortByMaxHeight);
     }
 }
 
