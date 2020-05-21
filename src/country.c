@@ -15,12 +15,12 @@ Country* getCountryFromConsole(void) {
     char buf[MAXLEN];
 
     printf("Name: ");
-    if(!fgets(buf, MAXLEN, stdin)) return NULL;
+    if(!fgets(buf, MAXLEN, stdin) || strlen(buf) == 1) return NULL;
     buf[strlen(buf) - 1] = '\0';
     strcpy(country->name, buf); 
 
     printf("Capital: ");
-    if(!fgets(buf, MAXLEN, stdin)) return NULL;
+    if(!fgets(buf, MAXLEN, stdin) || strlen(buf) == 1) return NULL;
     buf[strlen(buf) - 1] = '\0';
     strcpy(country->capital, buf);
 

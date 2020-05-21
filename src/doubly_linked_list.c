@@ -212,7 +212,7 @@ List* searchByName(List *list, char name[MAXLEN]) {
     List* res = init();
     
     for(Node* i = list->first; i; i = i->next) {
-        if(!strcmp(i->country->name, name)) {
+        if(!strncmp(i->country->name, name, strlen(name))) {
             pushBack(res, createNode(i->country));
         }
     }
