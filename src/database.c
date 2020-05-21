@@ -341,7 +341,7 @@ void searchCard(List* list) {
                 continue;
             }
 
-            printf("Max area: ");
+            printf("Max population: ");
             fgets(buf, MAXLEN, stdin);
             int maxPopulation = atoi(buf);
 
@@ -361,7 +361,7 @@ void searchCard(List* list) {
                 continue;
             }
 
-            printf("Max area: ");
+            printf("Max density: ");
             fgets(buf, MAXLEN, stdin);
             float maxDensity = atoi(buf);
 
@@ -381,7 +381,7 @@ void searchCard(List* list) {
                 continue;
             }
 
-            printf("Max area: ");
+            printf("Max hdi: ");
             fgets(buf, MAXLEN, stdin);
             float maxHdi = atof(buf);
 
