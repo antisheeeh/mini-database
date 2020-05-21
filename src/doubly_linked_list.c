@@ -318,6 +318,102 @@ List* searchByMaxHeight(List* list, int maxHeight) {
     return res;
 }
 
+List* searchByAreaRange(List* list, int minArea, int maxArea) {
+    if(!list) return NULL;
+
+    List* res = init();
+
+    for(Node* i = list->first; i; i = i->next) {
+        int area = i->country->area;
+
+        if(minArea <= area && area <= maxArea) {
+            pushBack(res, createNode(i->country));
+        }
+    }
+
+    return res;
+}
+
+List* searchByPopulationRange(List* list, int minPopulation, int maxPopulation) {
+    if(!list) return NULL;
+
+    List* res = init();
+
+    for(Node* i = list->first; i; i = i->next) {
+        int population = i->country->population;
+
+        if(minPopulation <= population && population <= maxPopulation) {
+            pushBack(res, createNode(i->country));
+        }
+    }
+
+    return res;
+}
+
+List* searchByDensityRange(List* list, float minDensity, float maxDensity) {
+    if(!list) return NULL;
+
+    List* res = init();
+
+    for(Node* i = list->first; i; i = i->next) {
+        float density = i->country->density;
+
+        if(minDensity <= density && density <= maxDensity) {
+            pushBack(res, createNode(i->country));
+        }
+    }
+
+    return res;
+}
+
+List* searchByHdiRange(List* list, int minHdi, int maxHdi) {
+    if(!list) return NULL;
+
+    List* res = init();
+
+    for(Node* i = list->first; i; i = i->next) {
+        int hdi = i->country->hdi;
+
+        if(minHdi <= hdi && hdi <= maxHdi) {
+            pushBack(res, createNode(i->country));
+        }
+    }
+
+    return res;
+}
+
+List* searchByMinHeightRange(List* list, int minHeight, int maxHeight) {
+    if(!list) return NULL;
+
+    List* res = init();
+
+    for(Node* i = list->first; i; i = i->next) {
+        int height = i->country->elevation[0];
+
+        if(minHeight <= height && height <= maxHeight) {
+            pushBack(res, createNode(i->country));
+        }
+    }
+
+    return res;
+}
+
+List* searchByMaxHeightRange(List* list, int minHeight, int maxHeight) {
+    if(!list) return NULL;
+
+    List* res = init();
+
+    for(Node* i = list->first; i; i = i->next) {
+        int height = i->country->elevation[1];
+
+        if(minHeight <= height && height <= maxHeight) {
+            pushBack(res, createNode(i->country));
+        }
+    }
+
+    return res;
+}
+
 Node* searchByIndex(List* list, int index) {
     if(!list || index < 0 || index > list->size - 1) return NULL;
 

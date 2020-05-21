@@ -31,6 +31,13 @@ List* searchByHdi(List* list, float hdi);
 List* searchByMinHeight(List* list, int minHeight);
 List* searchByMaxHeight(List* list, int maxHeight);
 
+List* searchByAreaRange(List* list, int minArea, int maxArea);
+List* searchByPopulationRange(List* list, int minPopulation, int maxPopulation);
+List* searchByDensityRange(List* list, float minDensity, float maxDensity);
+List* searchByHdiRange(List* list, int minHdi, int maxHdi);
+List* searchByMinHeightRange(List* list, int minHeight, int maxHeight);
+List* searchByMaxHeightRange(List* list, int minHeight, int maxHeight);
+
 Node* searchByIndex(List* list, int index);
 
 int sortByName(Node* node1, Node* node2, int mode);
@@ -41,7 +48,6 @@ int sortByDensity(Node* node1, Node* node2, int mode);
 int sortByHdi(Node* node1, Node* node2, int mode);
 int sortByMinHeight(Node* node1, Node* node2, int mode);
 int sortByMaxHeight(Node* node1, Node* node2, int mode);
-
 
 void swapNodes(List* list, Node* node1, Node* node2);
 void sort(List* list, int (*compaire)(Node*, Node*, int), int mode);

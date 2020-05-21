@@ -196,6 +196,7 @@ void deleteCard(List* list) {
 
 void searchCard(List* list) {
     int error;
+    int choice;
     char buf[MAXLEN];
 
     do {
@@ -210,10 +211,18 @@ void searchCard(List* list) {
         puts("5 - hdi");
         puts("6 - min height");
         puts("7 - max height");
+        puts("8 - area range");
+        puts("9 - population range");
+        puts("10 - density range");
+        puts("11 - hdi range");
+        puts("12 - min height range");
+        puts("13 - max height range");
 
         fgets(buf, MAXLEN, stdin);
+
+        choice = atoi(buf);
         
-        if(error = strlen(buf) != 2 || buf[0] < '0' || buf[0] > '7') {
+        if(error = choice < 0 || choice > 13 || (choice == 0 && buf[0] != '0')) {
             puts("Input is incorrect! Please try again\n");
             puts("Press any key to continue...");
             getchar();
@@ -224,7 +233,7 @@ void searchCard(List* list) {
     List* res = NULL;
 
     do {
-        if(buf[0] == '0') {
+        if(choice == 0) {
             printf("Name: ");
 
             if(error = !fgets(buf, MAXLEN, stdin)) {
@@ -233,7 +242,7 @@ void searchCard(List* list) {
                 buf[strlen(buf) - 1] = '\0';
                 res = searchByName(list, buf);
             }
-        } else if(buf[0] == '1') {
+        } else if(choice == 1) {
             printf("Capital: ");
 
             if(error = !fgets(buf, MAXLEN, stdin)) {
@@ -242,7 +251,7 @@ void searchCard(List* list) {
                 buf[strlen(buf) - 1] = '\0';
                 res = searchByCapital(list, buf);
             }
-        } else if(buf[0] == '2') {
+        } else if(choice == 2) {
             printf("Area: ");
             fgets(buf, MAXLEN, stdin);
             int area = atoi(buf);
@@ -252,7 +261,7 @@ void searchCard(List* list) {
             } else {
                 res = searchByArea(list, area);
             }
-        } else if(buf[0] == '3') {
+        } else if(choice == 3) {
             printf("Population: ");
             fgets(buf, MAXLEN, stdin);
             int population = atoi(buf);
@@ -262,7 +271,7 @@ void searchCard(List* list) {
             } else {
                 res = searchByPopulation(list, population);
             }
-        } else if(buf[0] == '4') {
+        } else if(choice == 4) {
             printf("Density: ");
             fgets(buf, MAXLEN, stdin);
             float density = atof(buf);
@@ -272,7 +281,7 @@ void searchCard(List* list) {
             } else {
                 res = searchByDensity(list, density);
             }
-        } else if(buf[0] == '5') {
+        } else if(choice == 5) {
             printf("HDI: ");
             fgets(buf, MAXLEN, stdin);
             float hdi = atof(buf);
@@ -282,7 +291,7 @@ void searchCard(List* list) {
             } else {
                 res = searchByHdi(list, hdi);
             }
-        } else if(buf[0] == '6') {
+        } else if(choice == 6) {
             printf("Min height: ");
             fgets(buf, MAXLEN, stdin);
             int minHeight = atoi(buf);
@@ -292,7 +301,7 @@ void searchCard(List* list) {
             } else {
                 res = searchByMinHeight(list, minHeight);
             }
-        } else if(buf[0] == '7') {
+        } else if(choice == 7) {
             printf("Max height: ");
             fgets(buf, MAXLEN, stdin);
             int maxHeight = atoi(buf);
@@ -302,6 +311,126 @@ void searchCard(List* list) {
             } else {
                 res = searchByMinHeight(list, maxHeight);
             }
+        } else if(choice == 8) {
+            printf("Min area: ");
+            fgets(buf, MAXLEN, stdin);
+            int minArea = atoi(buf);
+
+            if(error = !minArea && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            printf("Max area: ");
+            fgets(buf, MAXLEN, stdin);
+            int maxArea = atoi(buf);
+
+            if(error = !maxArea && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            res = searchByAreaRange(list, minArea, maxArea);
+        } else if(choice == 9) {
+            printf("Min population: ");
+            fgets(buf, MAXLEN, stdin);
+            int minPopulation = atoi(buf);
+
+            if(error = !minPopulation && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            printf("Max area: ");
+            fgets(buf, MAXLEN, stdin);
+            int maxPopulation = atoi(buf);
+
+            if(error = !maxPopulation && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            res = searchByPopulationRange(list, minPopulation, maxPopulation);
+        } else if(choice == 10) {
+            printf("Min density: ");
+            fgets(buf, MAXLEN, stdin);
+            float minDensity = atoi(buf);
+
+            if(error = !minDensity && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            printf("Max area: ");
+            fgets(buf, MAXLEN, stdin);
+            float maxDensity = atoi(buf);
+
+            if(error = !maxDensity && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            res = searchByDensityRange(list, minDensity, maxDensity);
+        } else if(choice == 11) {
+            printf("Min hdi: ");
+            fgets(buf, MAXLEN, stdin);
+            float minHdi = atof(buf);
+
+            if(error = !minHdi && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            printf("Max area: ");
+            fgets(buf, MAXLEN, stdin);
+            float maxHdi = atof(buf);
+
+            if(error = !maxHdi && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            res = searchByHdiRange(list, minHdi, maxHdi);
+        } else if(choice == 12) {
+            printf("Min min height: ");
+            fgets(buf, MAXLEN, stdin);
+            int minHeight = atoi(buf);
+
+            if(error = !minHeight && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            printf("Max min height: ");
+            fgets(buf, MAXLEN, stdin);
+            int maxHeight = atoi(buf);
+
+            if(error = !maxHeight && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            res = searchByMinHeightRange(list, minHeight, maxHeight);
+        } else if(choice == 13) {
+            printf("Min max height: ");
+            fgets(buf, MAXLEN, stdin);
+            int minHeight = atoi(buf);
+
+            if(error = !minHeight && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            printf("Max max height: ");
+            fgets(buf, MAXLEN, stdin);
+            int maxHeight = atoi(buf);
+
+            if(error = !maxHeight && buf[0] != '0') {
+                puts("Input is incorrect! Please try again\n");
+                continue;
+            }
+
+            res = searchByMaxHeightRange(list, minHeight, maxHeight);
         }
     } while(error);
 
