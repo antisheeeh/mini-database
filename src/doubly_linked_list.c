@@ -266,7 +266,7 @@ void printList(List* list) {
     if(!list) return;
 
     if(isEmpty(list)) {
-        puts("List is empty\n");
+        puts("List is empty");
         return;
     }
 

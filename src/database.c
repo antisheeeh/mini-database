@@ -277,7 +277,6 @@ void searchCard(List* list) {
             puts("Please enter first letters of countries to be searched");
 
             if(error = !fgets(name, MAXLEN, stdin) || strlen(name) == 1) {
-                puts("Input is incorrect! Please try again\n");
                 continue;
             }
 
@@ -286,7 +285,6 @@ void searchCard(List* list) {
                 fgets(min, MAXLEN, stdin);
 
                 if(error = !atoi(min) && min[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
 
@@ -294,7 +292,6 @@ void searchCard(List* list) {
                 fgets(max, MAXLEN, stdin);
 
                 if(error = !atoi(max) && max[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
             } else if(mode == 9) {
@@ -302,7 +299,6 @@ void searchCard(List* list) {
                 fgets(min, MAXLEN, stdin);
 
                 if(error = !atoi(min) && min[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
 
@@ -310,7 +306,6 @@ void searchCard(List* list) {
                 fgets(max, MAXLEN, stdin);
 
                 if(error = !atoi(max) && max[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
             } else if(mode == 10) {
@@ -318,7 +313,6 @@ void searchCard(List* list) {
                 fgets(min, MAXLEN, stdin);
 
                 if(error = !atof(min) && min[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
 
@@ -326,7 +320,6 @@ void searchCard(List* list) {
                 fgets(max, MAXLEN, stdin);
 
                 if(error = !atof(max) && max[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
             } else if(mode == 11) {
@@ -334,7 +327,6 @@ void searchCard(List* list) {
                 fgets(min, MAXLEN, stdin);
 
                 if(error = !atof(min) && min[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
 
@@ -342,7 +334,6 @@ void searchCard(List* list) {
                 fgets(max, MAXLEN, stdin);
 
                 if(error = !atof(max) && max[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
             } else if(mode == 12) {
@@ -350,7 +341,6 @@ void searchCard(List* list) {
                 fgets(min, MAXLEN, stdin);
 
                 if(error = !atoi(min) && min[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
 
@@ -358,7 +348,6 @@ void searchCard(List* list) {
                 fgets(max, MAXLEN, stdin);
 
                 if(error = !atoi(max) && max[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
             } else if(mode == 13) {
@@ -366,7 +355,6 @@ void searchCard(List* list) {
                 fgets(min, MAXLEN, stdin);
 
                 if(error = !atoi(min) && min[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
 
@@ -374,7 +362,6 @@ void searchCard(List* list) {
                 fgets(max, MAXLEN, stdin);
 
                 if(error = !atoi(max) && max[0] != '0') {
-                    puts("Input is incorrect! Please try again\n");
                     continue;
                 }
             }
@@ -448,6 +435,7 @@ void sortCards(List* list) {
 
         if(error = strlen(buf) != 2 || buf[0] < '0' || buf[0] > '1') {
             puts("Input is incorrect! Please try again\n");
+            puts("Please enter sort mode");
         }
     } while(error);
 
