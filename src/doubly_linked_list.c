@@ -7,9 +7,15 @@
 
 #include "../include/doubly_linked_list.h"
 
+#define HEADER "\nID     | Name             | Capital          | Area         | Population   | Density      | HDI          | Min height   | Max height    \n"
+#define SPLIT_LINE "-------+------------------+------------------+--------------+--------------+--------------+--------------+--------------+---------------\n"
+
 List* init(void) {
     List* list = malloc(sizeof(List));
-    if(!list) return NULL;
+    if(!list) {
+        puts("Error allocating memory for list");
+        return NULL;
+    }
 
     list->size = 0;
     list->first = NULL;
@@ -18,19 +24,16 @@ List* init(void) {
     return list;
 }
 
-List* initFromFile(FILE* file) {
-    if(!file) {
-        puts("Cannot open input csv file");
-        return NULL;
-    }
+List* initFromFile(FILE* db) {
+    if(!db) return NULL;
 
     List* list = init();
     if(!list) return NULL;
 
     char buf[MAX_LENGTH];
 
-    while(fgets(buf, MAX_LENGTH, file)) {
-        pushBack(list, createNode(getCountryFromString(splitLine(buf))));
+    while(fgets(buf, MAX_LENGTH, db)) {
+        pushBack(list, getCountryFromString(buf, NORMAL));
     }
 
     return list;
@@ -44,7 +47,10 @@ Node* createNode(Country* country) {
     if(!country) return NULL;
 
     Node* node = malloc(sizeof(Node));
-    if(!node) return NULL;
+    if(!node) {
+        puts("Error allocating memory for node");
+        return NULL;
+    }
 
     node->country = country;
     node->prev = NULL;
@@ -53,58 +59,68 @@ Node* createNode(Country* country) {
     return node;
 }
 
-int sortByName(Node* node1, Node* node2, int mode) {
-    return mode * strcmp(node1->country->name, node2->country->name) > 0;
-}
-
-int sortByCapital(Node* node1, Node* node2, int mode) {
-    return mode * strcmp(node1->country->capital, node2->country->capital) > 0;
-}
-
-int sortByArea(Node* node1, Node* node2, int mode) {
-    return mode * (node1->country->area - node2->country->area) > 0;
-}
-
-int sortByPopulation(Node* node1, Node* node2, int mode) {
-    return mode * (node1->country->population - node2->country->population) > 0;
-}
-
-int sortByDensity(Node* node1, Node* node2, int mode) {
-    return mode * (node1->country->density - node2->country->density) > 0;
-}
-
-int sortByHdi(Node* node1, Node* node2, int mode) {
-    return mode * (node1->country->hdi - node2->country->hdi) > 0;
-}
-
-int sortByMinHeight(Node* node1, Node* node2, int mode) {
-    return mode * (node1->country->elevation[0] - node2->country->elevation[0]) > 0;
-}
-
-int sortByMaxHeight(Node* node1, Node* node2, int mode) {
-    return mode * (node1->country->elevation[1] - node2->country->elevation[1]) > 0;
-}
-
-void sort(List* list, int (*compaire)(Node*, Node*, int), int mode) {
+void sort(List* list, int mode, int order) {
     for(int i = 0; i < list->size; ++i) {
         for(int j = 0; j < list->size - i - 1; ++j) {
             Node* node1 = searchByIndex(list, j);
-            Node* node2 = searchByIndex(list, j + 1);
 
-            if(compaire(node1, node2, mode)) {
-                swapNodes(list, node1, node2);
+            if(order * compaire(node1->country, node1->next->country, mode) > 0) {
+                swap(list, node1, node1->next);
             }
         }
     }
 }
 
+List* search(List* list, char str[MAXLEN], int mode) {
+    if(!list) return NULL;
+
+    List* res = init();
+    if(!res) return NULL;
+
+    Country* country = getCountryFromString(str, mode);
+    if(!country) return NULL;
+
+    for(Node* node = list->first; node; node = node->next) {
+        if(!compaire(node->country, country, mode)) {
+            pushBack(res, node->country);
+        }
+    }
+
+    return res;
+}
+
+List* searchByRange(List* list, char name[MAXLEN], char min[MAXLEN], char max[MAXLEN], int mode) {
+    if(!list) return NULL;
+
+    List* res = init();
+    if(!res) return NULL;
+
+    Country* country1 = getCountryFromString(min, mode);
+    if(!country1) return NULL;
+
+    Country* country2 = getCountryFromString(max, mode);
+    if(!country2) return NULL;
+
+    puts(name);
+
+    for(Node* node = list->first; node; node = node->next) {
+        if(!strncmp(node->country->name, name, strlen(name)) &&
+            compaire(node->country, country1, mode) >= 0 && 
+            compaire(node->country, country2, mode) <= 0) {
+            pushBack(res, node->country);
+        }
+    }
+
+    return res;
+}
+
 void reverse(List* list) {
     for(int i = list->size / 2 - 1; i >= 0; --i) {
-        swapNodes(list, searchByIndex(list, i), searchByIndex(list, list->size - i - 1));
+        swap(list, searchByIndex(list, i), searchByIndex(list, list->size - i - 1));
     }
 }
 
-void swapNodes(List* list, Node* node1, Node* node2) {
+void swap(List* list, Node* node1, Node* node2) {
     if(!list || !node1 || !node2 || node1 == node2) return;
 
     if(node1->next == node2) {
@@ -148,43 +164,52 @@ void swapNodes(List* list, Node* node1, Node* node2) {
     else if(list->last == node2) list->last = node1;
 }
 
-void pushFront(List* list, Node* node) {
-    if(!list || !node) return;
+void pushFront(List* list, Country* country) {
+    if(!list || !country) return;
 
-    node->next = list->first;
+    Node* node = createNode(country);
+    if(!node) return;
 
-    if(!isEmpty(list)) {
+    if(isEmpty(list)) {
+        list->last = node;
+    } else {
+        node->next = list->first;
         list->first->prev = node;
     }
-    
-    list->first = node;
-    if(isEmpty(list)) list->last = node;
 
+    list->first = node;
     list->size++;
 }
 
-void pushBack(List* list, Node* node) {
-    if(!list || !node) return;
+void pushBack(List* list, Country* country) {
+    if(!list || !country) return;
 
-    node->prev = list->last;
+    Node* node = createNode(country);
+    if(!node) return;
 
-    if(!isEmpty(list)) {
+    if(isEmpty(list)) {
+        list->first = node;
+    } else {
+        node->prev = list->last;
         list->last->next = node;
     }
 
-    if(isEmpty(list)) list->first = node;
     list->last = node;
-    
     list->size++;
 }
 
-void insertAfter(List* list, Node* node, Node* newNode) {
-    if(!list || !node || !newNode) return;
+void insertAfter(List* list, Node* node, Country* country) {
+    if(!list || !node || !country) return;
 
     if(node == list->last) {
-        pushBack(list, newNode);
+        pushBack(list, country);
     } else {
+        Node* newNode = createNode(country);
+        if(!newNode) return;
+
+        newNode->prev = node;
         newNode->next = node->next;
+        
         node->next->prev = newNode;
         node->next = newNode;
 
@@ -192,226 +217,14 @@ void insertAfter(List* list, Node* node, Node* newNode) {
     }
 }
 
-void insertBefore(List* list, Node* node, Node* newNode) {
-    if(!list || !node || !newNode) return;
+void insertBefore(List* list, Node* node, Country* country) {
+    if(!list || !node || !country) return;
 
     if(node == list->first) {
-        pushFront(list, newNode);
+        pushFront(list, country);
     } else {
-        newNode->prev = node->prev;
-        node->prev->next = newNode;
-        node->prev = newNode;
-
-        list->size++;
+        insertAfter(list, node->prev, country);
     }
-}
-
-List* searchByName(List *list, char name[MAXLEN]) {
-    if(!list || !name) return NULL;
-
-    List* res = init();
-    
-    for(Node* i = list->first; i; i = i->next) {
-        if(!strncmp(i->country->name, name, strlen(name))) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByCapital(List* list, char capital[MAXLEN]) {
-    if(!list || !capital) return NULL;
-    
-    List* res = init();
-    
-    for(Node* i = list->first; i; i = i->next) {
-        if(!strcmp(i->country->capital, capital)) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByArea(List* list, int area) {
-    if(!list || area < 0) return NULL;
-
-    List* res = init();
-    
-    for(Node* i = list->first; i; i = i->next) {
-        if(i->country->area == area) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByPopulation(List* list, int population) {
-    if(!list || population < 0) return NULL;
-    
-    List* res = init();
-    
-    for(Node* i = list->first; i; i = i->next) {
-        if(i->country->population == population) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByDensity(List* list, float density) {
-    if(!list || density < 0) return NULL;
-    
-    List* res = init();
-    
-    for(Node* i = list->first; i; i = i->next) {
-        if(i->country->density == density) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByHdi(List* list, float hdi) {
-    if(!list || hdi < 0 || hdi > 1) return NULL;
-    
-    List* res = init();
-    
-    for(Node* i = list->first; i; i = i->next) {
-        if(i->country->hdi == hdi) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByMinHeight(List* list, int minHeight) {
-    if(!list) return NULL;
-    
-    List* res = init();
-    
-    for(Node* i = list->first; i; i = i->next) {
-        if(i->country->elevation[0] == minHeight) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByMaxHeight(List* list, int maxHeight) {
-    if(!list) return NULL;
-    
-    List* res = init();
-    
-    for(Node* i = list->first; i; i = i->next) {
-        if(i->country->elevation[1] == maxHeight) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByAreaRange(List* list, int minArea, int maxArea) {
-    if(!list) return NULL;
-
-    List* res = init();
-
-    for(Node* i = list->first; i; i = i->next) {
-        int area = i->country->area;
-
-        if(minArea <= area && area <= maxArea) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByPopulationRange(List* list, int minPopulation, int maxPopulation) {
-    if(!list) return NULL;
-
-    List* res = init();
-
-    for(Node* i = list->first; i; i = i->next) {
-        int population = i->country->population;
-
-        if(minPopulation <= population && population <= maxPopulation) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByDensityRange(List* list, float minDensity, float maxDensity) {
-    if(!list) return NULL;
-
-    List* res = init();
-
-    for(Node* i = list->first; i; i = i->next) {
-        float density = i->country->density;
-
-        if(minDensity <= density && density <= maxDensity) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByHdiRange(List* list, int minHdi, int maxHdi) {
-    if(!list) return NULL;
-
-    List* res = init();
-
-    for(Node* i = list->first; i; i = i->next) {
-        int hdi = i->country->hdi;
-
-        if(minHdi <= hdi && hdi <= maxHdi) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByMinHeightRange(List* list, int minHeight, int maxHeight) {
-    if(!list) return NULL;
-
-    List* res = init();
-
-    for(Node* i = list->first; i; i = i->next) {
-        int height = i->country->elevation[0];
-
-        if(minHeight <= height && height <= maxHeight) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
-}
-
-List* searchByMaxHeightRange(List* list, int minHeight, int maxHeight) {
-    if(!list) return NULL;
-
-    List* res = init();
-
-    for(Node* i = list->first; i; i = i->next) {
-        int height = i->country->elevation[1];
-
-        if(minHeight <= height && height <= maxHeight) {
-            pushBack(res, createNode(i->country));
-        }
-    }
-
-    return res;
 }
 
 Node* searchByIndex(List* list, int index) {
@@ -440,6 +253,7 @@ void removeNode(List* list, Node* node) {
     list->size--;
 
     free(node);
+    node = NULL;
 }
 
 void printNode(Node* node) {
@@ -456,14 +270,15 @@ void printList(List* list) {
         return;
     }
 
-    printHeader();
+    printf(HEADER);
+    printf(SPLIT_LINE);
 
     Node* node = list->first;
 
     for(int i = 0; i < list->size; ++i) {
         printf("%-6d | ", i);
         printCountryInTable(node->country);
-        if(node->next) printSepLine();
+        if(node->next) printf(SPLIT_LINE);
         node = node->next;
     }
 }
@@ -480,4 +295,5 @@ void clearList(List* list) {
     }
 
     free(list);
+    list = NULL;
 }

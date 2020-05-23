@@ -12,21 +12,7 @@
 
 #include "../include/menu.h"
 
-void (*options[OPTIONS])();
-
-void initMenu(void) {
-    options[0] = printReference;
-    options[1] = addCard;
-    options[2] = editCard;
-    options[3] = deleteCard;
-    options[4] = searchCard;
-    options[5] = sortCards;
-    options[6] = printCards;
-}
-
 void run(FILE* db, List* list) {
-    initMenu();
-
     int c, error = 0;
 
     char buf[MAXLEN];
@@ -45,10 +31,28 @@ void run(FILE* db, List* list) {
                 return;
             } else {
                 CLS;
-                options[buf[0] - '0'](list);
+
+                int mode = buf[0] - '0';
+                
+                if(mode == 0) {
+                    printReference();
+                } else if(mode == 1) {
+                    addCard(list);
+                } else if(mode == 2) {
+                    editCard(list);
+                } else if(mode == 3) {
+                    deleteCard(list);
+                } else if(mode == 4) {
+                    searchCard(list);
+                } else if(mode == 5) {
+                    sortCards(list);
+                } else if(mode == 6) {
+                    printCards(list);
+                }
+
                 updateDatabase(db, list);
                 puts("\nPress any key to continue...");
-                getchar();
+                fgets(buf, MAXLEN, stdin);
             }
         } while(error);
 
@@ -77,5 +81,13 @@ void printMenu(void) {
 void printReference(void) {
     puts("Reference\n");
     puts("This is a mini database developed in C");
-    puts("Author - Kirill Konoplev");
+    puts("Author - Kirill Konoplev\n");
+    puts("All data is saved in the db.csv file in the directory with the executable file\n");
+    puts("There are the following operations:");
+    puts("*  Adding cards");
+    puts("*  Editing cards");
+    puts("*  Removing cards");
+    puts("*  Output all cards");
+    puts("*  Search cards by request");
+    puts("*  Sort cards by request");
 }

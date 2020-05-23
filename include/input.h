@@ -5,6 +5,3 @@
 #define MAXLEN 64
 
 char** splitLine(char line[MAX_LENGTH]);
-
-void printHeader(void);
-void printSepLine(void);

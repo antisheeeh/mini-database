@@ -4,6 +4,12 @@
 
 int main(void) {
     FILE* db = fopen("db.csv", "a+");
+
+    if(!db) {
+        puts("Error opening input file");
+        return 0;
+    }
+    
     List* list = initFromFile(db);
     if(!list) list = init();
 

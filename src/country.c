@@ -8,6 +8,38 @@
 
 #define WORDS_IN_LINE 8
 
+int compaire(Country* country1, Country* country2, int mode) {
+    char str1[MAXLEN], str2[MAXLEN];
+
+    if(mode == 0) {
+        strcpy(str1, country1->name);
+        strcpy(str2, country2->name);
+    } else if(mode == 1) {
+        strcpy(str1, country1->capital);
+        strcpy(str2, country2->capital);
+    } else if(mode == 2) {
+        sprintf(str1, "%d", country1->area);
+        sprintf(str2, "%d", country2->area);
+    } else if(mode == 3) {
+        sprintf(str1, "%d", country1->population);
+        sprintf(str2, "%d", country2->population);
+    } else if(mode == 4) {
+        sprintf(str1, "%f", country1->density);
+        sprintf(str2, "%f", country2->density);
+    } else if(mode == 5) {
+        sprintf(str1, "%f", country1->hdi);
+        sprintf(str2, "%f", country2->hdi);
+    } else if(mode == 6) {
+        sprintf(str1, "%d", country1->elevation[0]);
+        sprintf(str2, "%d", country2->elevation[0]);
+    } else if(mode == 7) {
+        sprintf(str1, "%d", country1->elevation[1]);
+        sprintf(str2, "%d", country2->elevation[1]);
+    }
+
+    return strcmp(str1, str2);
+}
+ 
 Country* getCountryFromConsole(void) {
     Country *country = malloc(sizeof(*country));
     if(!country) return NULL;
@@ -57,18 +89,53 @@ Country* getCountryFromConsole(void) {
     return country;
 }
 
-Country* getCountryFromString(char** str) {
+Country* getCountryFromString(char s[MAX_LENGTH], int mode) {
+    if(!s) return NULL;
+    s[strlen(s)] = '\0';
+
     Country *country = malloc(sizeof(*country));
     if(!country) return NULL;
 
-    strcpy(country->name, str[0]);
-    strcpy(country->capital, str[1]);
-    country->area = atoi(str[2]);
-    country->population = atoi(str[3]);
-    country->density = atof(str[4]);
-    country->hdi = atof(str[5]);
-    country->elevation[0] = atoi(str[6]);
-    country->elevation[1] = atoi(str[7]);
+    if(0 <= mode && mode <= 7) {
+        strcpy(country->name, "0");
+        strcpy(country->capital, "0");
+        country->area = 0;
+        country->population = 0;
+        country->density = 0;
+        country->hdi = 0;
+        country->elevation[0] = 0;
+        country->elevation[1] = 0;
+
+        if(mode == 0) {
+            strcpy(country->name, s);
+        } else if(mode == 1) {
+            strcpy(country->capital, s);
+        } else if(mode == 2) {
+            country->area = atoi(s);
+        } else if(mode == 3) {
+            country->population = atoi(s);
+        } else if(mode == 4) {
+            country->density = atof(s);
+        } else if(mode == 5) {
+            country->hdi = atof(s);
+        } else if(mode == 6) {
+            country->elevation[0] = atoi(s);
+        } else if(mode == 7) {
+            country->elevation[1] = atoi(s);
+        }
+    } else if(mode == NORMAL) {
+        char** str = splitLine(s);
+        if(!str) return NULL;
+
+        strcpy(country->name, str[0]);
+        strcpy(country->capital, str[1]);
+        country->area = atoi(str[2]);
+        country->population = atoi(str[3]);
+        country->density = atof(str[4]);
+        country->hdi = atof(str[5]);
+        country->elevation[0] = atoi(str[6]);
+        country->elevation[1] = atoi(str[7]);
+    }
 
     return country;
 }
