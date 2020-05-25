@@ -16,9 +16,11 @@ void addCard(List* list) {
     Country* country;
 
     do {
-        puts("Add card\n");
+        puts("Add card");
 
-        puts("Please enter your country");
+        printList(list);
+
+        puts("\nPlease enter your country");
         country = getCountryFromConsole();
 
         if(error = !country) {
@@ -41,9 +43,11 @@ void editCard(List* list) {
     char buf[MAXLEN];
 
     do {
-        puts("Edit card\n");
+        puts("Edit card");
 
-        puts("Please enter card index");
+        printList(list);
+
+        puts("\nPlease enter card index");
 
         fgets(buf, MAXLEN, stdin);
         index = atoi(buf);
@@ -175,8 +179,11 @@ void deleteCard(List* list) {
     int error;
 
     do {
-        puts("Delete card\n");
-        puts("Please enter card index");
+        puts("Delete card");
+        
+        printList(list);
+
+        puts("\nPlease enter card index");
 
         fgets(buf, MAXLEN, stdin);
         index = atoi(buf);
@@ -207,9 +214,11 @@ void searchCard(List* list) {
     char buf[MAXLEN];
 
     do {
-        puts("Search card\n");
+        puts("Search card");
 
-        puts("Please enter field to be searched");
+        printList(list);
+
+        puts("\nPlease enter field to be searched");
         puts("0 - name");
         puts("1 - capital");
         puts("2 - area");
@@ -399,9 +408,11 @@ void sortCards(List* list) {
     char buf[MAXLEN];
 
     do {
-        puts("Sort cards\n");
+        puts("Sort cards");
 
-        puts("Please enter field to be sorted");
+        printList(list);
+
+        puts("\nPlease enter field to be sorted");
         puts("0 - name");
         puts("1 - capital");
         puts("2 - area");
@@ -451,7 +462,7 @@ void sortCards(List* list) {
 }
 
 void printCards(List* list) {
-    puts("Print cards\n");
+    puts("Print cards");
 
     printList(list);
 }
