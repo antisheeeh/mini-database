@@ -474,5 +474,8 @@ void updateDatabase(FILE* db, List* list) {
         char* str = countryToString(t->country);
         fwrite(str, sizeof(char), strlen(str), db);
         fflush(db);
+
+        free(str);
+        str = NULL;
     }
 }
