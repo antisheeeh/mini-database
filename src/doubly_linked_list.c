@@ -62,10 +62,10 @@ Node* createNode(Country* country) {
 void sort(List* list, int mode, int order) {
     for(int i = 0; i < list->size; ++i) {
         for(int j = 0; j < list->size - i - 1; ++j) {
-            Node* node1 = searchByIndex(list, j);
+            Node* node = searchByIndex(list, j);
 
-            if(order * compaire(node1->country, node1->next->country, mode) > 0) {
-                swap(list, node1, node1->next);
+            if(order * compaire(node->country, node->next->country, mode) > 0) {
+                swap(list, node, node->next);
             }
         }
     }
@@ -100,8 +100,6 @@ List* searchByRange(List* list, char name[MAXLEN], char min[MAXLEN], char max[MA
 
     Country* country2 = getCountryFromString(max, mode);
     if(!country2) return NULL;
-
-    puts(name);
 
     for(Node* node = list->first; node; node = node->next) {
         if(!strncmp(node->country->name, name, strlen(name)) &&

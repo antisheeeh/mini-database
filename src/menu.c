@@ -13,7 +13,7 @@
 #include "../include/menu.h"
 
 void run(FILE* db, List* list) {
-    int c, error = 0;
+    int error = 0;
 
     char buf[MAXLEN];
 

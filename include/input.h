@@ -4,4 +4,4 @@
 #define WORDS_IN_LINE 8
 #define MAXLEN 64
 
-char** splitLine(char line[MAX_LENGTH]);
+void splitLine(char words[WORDS_IN_LINE][MAXLEN], char line[MAX_LENGTH]);

@@ -124,8 +124,8 @@ Country* getCountryFromString(char s[MAX_LENGTH], int mode) {
             country->elevation[1] = atoi(s);
         }
     } else if(mode == NORMAL) {
-        char** str = splitLine(s);
-        if(!str) return NULL;
+        char str[WORDS_IN_LINE][MAXLEN];
+        splitLine(str, s);
 
         strcpy(country->name, str[0]);
         strcpy(country->capital, str[1]);

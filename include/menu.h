@@ -9,4 +9,3 @@ void run(FILE* db, List* list);
 void printMenu(void);
 void printReference(void);
 int isValidInput(char buf[MAXLEN]);
-void initMenu(void);
