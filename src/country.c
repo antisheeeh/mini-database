@@ -9,35 +9,23 @@
 #define WORDS_IN_LINE 8
 
 int compaire(Country* country1, Country* country2, int mode) {
-    char str1[MAXLEN], str2[MAXLEN];
-
     if(mode == 0) {
-        strcpy(str1, country1->name);
-        strcpy(str2, country2->name);
+        return strcmp(country1->name, country2->name);
     } else if(mode == 1) {
-        strcpy(str1, country1->capital);
-        strcpy(str2, country2->capital);
+        return strcmp(country1->capital, country2->capital);
     } else if(mode == 2) {
-        sprintf(str1, "%d", country1->area);
-        sprintf(str2, "%d", country2->area);
+        return country1->area - country2->area;
     } else if(mode == 3) {
-        sprintf(str1, "%d", country1->population);
-        sprintf(str2, "%d", country2->population);
+        return country1->population - country2->population;
     } else if(mode == 4) {
-        sprintf(str1, "%f", country1->density);
-        sprintf(str2, "%f", country2->density);
+        return country1->density - country2->density;
     } else if(mode == 5) {
-        sprintf(str1, "%f", country1->hdi);
-        sprintf(str2, "%f", country2->hdi);
+        return country1->hdi - country2->hdi;
     } else if(mode == 6) {
-        sprintf(str1, "%d", country1->elevation[0]);
-        sprintf(str2, "%d", country2->elevation[0]);
+        return country1->elevation[0] - country2->elevation[0];
     } else if(mode == 7) {
-        sprintf(str1, "%d", country1->elevation[1]);
-        sprintf(str2, "%d", country2->elevation[1]);
+        return country1->elevation[1] - country2->elevation[1];
     }
-
-    return strcmp(str1, str2);
 }
  
 Country* getCountryFromConsole(void) {
