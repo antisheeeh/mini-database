@@ -53,22 +53,22 @@ Country* getCountryFromConsole(void) {
     printf("Area: ");
     fgets(buf, MAXLEN, stdin);
     country->area = atoi(buf);
-    if(!country->area && buf[0] != '0') return NULL;;
+    if(!country->area && buf[0] != '0' || country->area <= 0) return NULL;;
 
     printf("Population: ");
     fgets(buf, MAXLEN, stdin);
     country->population = atoi(buf);
-    if(!country->population && buf[0] != '0') return NULL;
+    if(!country->population && buf[0] != '0' || country->population <= 0) return NULL;
 
     printf("Density: ");
     fgets(buf, MAXLEN, stdin);
     country->density = atof(buf);
-    if(!country->density && buf[0] != '0') return NULL;
+    if(!country->density && buf[0] != '0' || country->density < 0) return NULL;
 
     printf("HDI: ");
     fgets(buf, MAXLEN, stdin);
     country->hdi = atof(buf);
-    if(!country->hdi && buf[0] != '0') return NULL;
+    if(!country->hdi && buf[0] != '0' || country->hdi < 0 || country->hdi > 1) return NULL;
 
     printf("Min height: ");
     fgets(buf, MAXLEN, stdin);
