@@ -18,9 +18,15 @@ int compaire(Country* country1, Country* country2, int mode) {
     } else if(mode == 3) {
         return country1->population - country2->population;
     } else if(mode == 4) {
-        return country1->density - country2->density;
+        char str1[MAXLEN], str2[MAXLEN];
+        sprintf(str1, "%f", country1->density);
+        sprintf(str2, "%f", country2->density);
+        return strcmp(str1, str2);
     } else if(mode == 5) {
-        return country1->hdi - country2->hdi;
+        char str1[MAXLEN], str2[MAXLEN];
+        sprintf(str1, "%f", country1->hdi);
+        sprintf(str2, "%f", country2->hdi);
+        return strcmp(str1, str2);
     } else if(mode == 6) {
         return country1->elevation[0] - country2->elevation[0];
     } else if(mode == 7) {
